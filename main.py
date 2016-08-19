@@ -192,6 +192,12 @@ def main():
             if args.verbose and counter % 10 == 0:
                 print("\nDone: {:.2%} ({})".format(counter / total, int(counter)))
             (post, json_stuff) = call_api("wall.get", [("owner_id", args.id), ("count", 1), ("offset", x)], args)
+            likes = post[1]['likes']['count']
+            if likes > 30:
+                print('Downloading post with %s likes' % likes)
+                process_post(("wall post", x), post, post_parser, json_stuff)
+            else:
+                print('Skipping post with %s likes' % likes)
             process_post(("wall post", x), post, post_parser, json_stuff)
             counter += 1
         if args.verbose:
